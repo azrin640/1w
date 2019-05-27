@@ -1254,7 +1254,7 @@ var GetFoldersFailed = /** @class */ (function () {
 /*!************************************************************!*\
   !*** ./src/app/main/apps/mail-ngrx/store/actions/index.ts ***!
   \************************************************************/
-/*! exports provided: GET_MAILS, GET_MAILS_SUCCESS, GET_MAILS_FAILED, SET_CURRENT_MAIL, SET_CURRENT_MAIL_SUCCESS, CHECK_CURRENT_MAIL, UPDATE_MAIL, UPDATE_MAIL_SUCCESS, UPDATE_MAILS, UPDATE_MAILS_SUCCESS, SET_SEARCH_TEXT, SELECT_ALL_MAILS, DESELECT_ALL_MAILS, TOGGLE_IN_SELECTED_MAILS, SELECT_MAILS_BY_PARAMETER, SET_FOLDER_ON_SELECTED_MAILS, ADD_LABEL_ON_SELECTED_MAILS, GetMails, GetMailsSuccess, GetMailsFailed, SetCurrentMail, SetCurrentMailSuccess, CheckCurrentMail, UpdateMail, UpdateMailSuccess, UpdateMails, UpdateMailsSuccess, SetSearchText, SelectAllMails, DeselectAllMails, ToggleInSelectedMails, SelectMailsByParameter, SetFolderOnSelectedMails, AddLabelOnSelectedMails, GET_FOLDERS, GET_FOLDERS_SUCCESS, GET_FOLDERS_FAILED, GetFolders, GetFoldersSuccess, GetFoldersFailed, GET_FILTERS, GET_FILTERS_SUCCESS, GET_FILTERS_FAILED, GetFilters, GetFiltersSuccess, GetFiltersFailed, GET_LABELS, GET_LABELS_SUCCESS, GET_LABELS_FAILED, GetLabels, GetLabelsSuccess, GetLabelsFailed */
+/*! exports provided: GET_MAILS, GET_MAILS_SUCCESS, GET_MAILS_FAILED, SET_CURRENT_MAIL, SET_CURRENT_MAIL_SUCCESS, CHECK_CURRENT_MAIL, UPDATE_MAIL, UPDATE_MAIL_SUCCESS, UPDATE_MAILS, UPDATE_MAILS_SUCCESS, SET_SEARCH_TEXT, SELECT_ALL_MAILS, DESELECT_ALL_MAILS, TOGGLE_IN_SELECTED_MAILS, SELECT_MAILS_BY_PARAMETER, SET_FOLDER_ON_SELECTED_MAILS, ADD_LABEL_ON_SELECTED_MAILS, GetMails, GetMailsSuccess, GetMailsFailed, SetCurrentMail, SetCurrentMailSuccess, CheckCurrentMail, UpdateMail, UpdateMailSuccess, UpdateMails, UpdateMailsSuccess, SetSearchText, SelectAllMails, DeselectAllMails, ToggleInSelectedMails, SelectMailsByParameter, SetFolderOnSelectedMails, AddLabelOnSelectedMails, GET_FILTERS, GET_FILTERS_SUCCESS, GET_FILTERS_FAILED, GetFilters, GetFiltersSuccess, GetFiltersFailed, GET_LABELS, GET_LABELS_SUCCESS, GET_LABELS_FAILED, GetLabels, GetLabelsSuccess, GetLabelsFailed, GET_FOLDERS, GET_FOLDERS_SUCCESS, GET_FOLDERS_FAILED, GetFolders, GetFoldersSuccess, GetFoldersFailed */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2275,7 +2275,7 @@ var ResolveGuard = /** @class */ (function () {
 /*!****************************************************!*\
   !*** ./src/app/main/apps/mail-ngrx/store/index.ts ***!
   \****************************************************/
-/*! exports provided: GET_MAILS, GET_MAILS_SUCCESS, GET_MAILS_FAILED, SET_CURRENT_MAIL, SET_CURRENT_MAIL_SUCCESS, CHECK_CURRENT_MAIL, UPDATE_MAIL, UPDATE_MAIL_SUCCESS, UPDATE_MAILS, UPDATE_MAILS_SUCCESS, SET_SEARCH_TEXT, SELECT_ALL_MAILS, DESELECT_ALL_MAILS, TOGGLE_IN_SELECTED_MAILS, SELECT_MAILS_BY_PARAMETER, SET_FOLDER_ON_SELECTED_MAILS, ADD_LABEL_ON_SELECTED_MAILS, GetMails, GetMailsSuccess, GetMailsFailed, SetCurrentMail, SetCurrentMailSuccess, CheckCurrentMail, UpdateMail, UpdateMailSuccess, UpdateMails, UpdateMailsSuccess, SetSearchText, SelectAllMails, DeselectAllMails, ToggleInSelectedMails, SelectMailsByParameter, SetFolderOnSelectedMails, AddLabelOnSelectedMails, GET_FOLDERS, GET_FOLDERS_SUCCESS, GET_FOLDERS_FAILED, GetFolders, GetFoldersSuccess, GetFoldersFailed, GET_FILTERS, GET_FILTERS_SUCCESS, GET_FILTERS_FAILED, GetFilters, GetFiltersSuccess, GetFiltersFailed, GET_LABELS, GET_LABELS_SUCCESS, GET_LABELS_FAILED, GetLabels, GetLabelsSuccess, GetLabelsFailed, getMailAppState, getAppState, reducers, getMailsState, getMails, getMailsLoaded, getSearchText, getMailsArr, getCurrentMail, getSelectedMailIds, getFoldersState, getFolders, getFoldersLoaded, getFoldersArr, getFiltersState, getFilters, getFiltersLoaded, getFiltersArr, getLabelsState, getLabels, getLabelsLoaded, getLabelsArr, effects, MailsInitialState, MailsReducer, FoldersInitialState, FoldersReducer, FiltersInitialState, FiltersReducer, LabelsInitialState, LabelsReducer, MailsEffect, FoldersEffect, FiltersEffect, LabelsEffect */
+/*! exports provided: GET_MAILS, GET_MAILS_SUCCESS, GET_MAILS_FAILED, SET_CURRENT_MAIL, SET_CURRENT_MAIL_SUCCESS, CHECK_CURRENT_MAIL, UPDATE_MAIL, UPDATE_MAIL_SUCCESS, UPDATE_MAILS, UPDATE_MAILS_SUCCESS, SET_SEARCH_TEXT, SELECT_ALL_MAILS, DESELECT_ALL_MAILS, TOGGLE_IN_SELECTED_MAILS, SELECT_MAILS_BY_PARAMETER, SET_FOLDER_ON_SELECTED_MAILS, ADD_LABEL_ON_SELECTED_MAILS, GetMails, GetMailsSuccess, GetMailsFailed, SetCurrentMail, SetCurrentMailSuccess, CheckCurrentMail, UpdateMail, UpdateMailSuccess, UpdateMails, UpdateMailsSuccess, SetSearchText, SelectAllMails, DeselectAllMails, ToggleInSelectedMails, SelectMailsByParameter, SetFolderOnSelectedMails, AddLabelOnSelectedMails, GET_FILTERS, GET_FILTERS_SUCCESS, GET_FILTERS_FAILED, GetFilters, GetFiltersSuccess, GetFiltersFailed, GET_LABELS, GET_LABELS_SUCCESS, GET_LABELS_FAILED, GetLabels, GetLabelsSuccess, GetLabelsFailed, getMailAppState, getAppState, reducers, getMailsState, getMails, getMailsLoaded, getSearchText, getMailsArr, getCurrentMail, getSelectedMailIds, getFoldersState, getFolders, getFoldersLoaded, getFoldersArr, getFiltersState, getFilters, getFiltersLoaded, getFiltersArr, getLabelsState, getLabels, getLabelsLoaded, getLabelsArr, effects, GET_FOLDERS, GET_FOLDERS_SUCCESS, GET_FOLDERS_FAILED, GetFolders, GetFoldersSuccess, GetFoldersFailed, MailsInitialState, MailsReducer, FoldersInitialState, FoldersReducer, FiltersInitialState, FiltersReducer, LabelsInitialState, LabelsReducer, MailsEffect, FoldersEffect, FiltersEffect, LabelsEffect */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2349,18 +2349,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AddLabelOnSelectedMails", function() { return _actions__WEBPACK_IMPORTED_MODULE_0__["AddLabelOnSelectedMails"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GET_FOLDERS", function() { return _actions__WEBPACK_IMPORTED_MODULE_0__["GET_FOLDERS"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GET_FOLDERS_SUCCESS", function() { return _actions__WEBPACK_IMPORTED_MODULE_0__["GET_FOLDERS_SUCCESS"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GET_FOLDERS_FAILED", function() { return _actions__WEBPACK_IMPORTED_MODULE_0__["GET_FOLDERS_FAILED"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GetFolders", function() { return _actions__WEBPACK_IMPORTED_MODULE_0__["GetFolders"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GetFoldersSuccess", function() { return _actions__WEBPACK_IMPORTED_MODULE_0__["GetFoldersSuccess"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GetFoldersFailed", function() { return _actions__WEBPACK_IMPORTED_MODULE_0__["GetFoldersFailed"]; });
-
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GET_FILTERS", function() { return _actions__WEBPACK_IMPORTED_MODULE_0__["GET_FILTERS"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GET_FILTERS_SUCCESS", function() { return _actions__WEBPACK_IMPORTED_MODULE_0__["GET_FILTERS_SUCCESS"]; });
@@ -2384,6 +2372,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GetLabelsSuccess", function() { return _actions__WEBPACK_IMPORTED_MODULE_0__["GetLabelsSuccess"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GetLabelsFailed", function() { return _actions__WEBPACK_IMPORTED_MODULE_0__["GetLabelsFailed"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GET_FOLDERS", function() { return _actions__WEBPACK_IMPORTED_MODULE_0__["GET_FOLDERS"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GET_FOLDERS_SUCCESS", function() { return _actions__WEBPACK_IMPORTED_MODULE_0__["GET_FOLDERS_SUCCESS"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GET_FOLDERS_FAILED", function() { return _actions__WEBPACK_IMPORTED_MODULE_0__["GET_FOLDERS_FAILED"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GetFolders", function() { return _actions__WEBPACK_IMPORTED_MODULE_0__["GetFolders"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GetFoldersSuccess", function() { return _actions__WEBPACK_IMPORTED_MODULE_0__["GetFoldersSuccess"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GetFoldersFailed", function() { return _actions__WEBPACK_IMPORTED_MODULE_0__["GetFoldersFailed"]; });
 
 /* harmony import */ var _reducers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./reducers */ "./src/app/main/apps/mail-ngrx/store/reducers/index.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getMailAppState", function() { return _reducers__WEBPACK_IMPORTED_MODULE_1__["getMailAppState"]; });

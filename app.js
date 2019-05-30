@@ -27,9 +27,9 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 
 // Return other routes to Angular index file
-// app.get('*', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'dist/boilerplate/index.html'));
-// });
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist/index.html'));
+});
 
 // Takes the raw requests and turns them into usable properties on req.body
 app.use(bodyParser.json());

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSnackBarModule } from '@angular/material';
 
 import { FuseSharedModule } from '@fuse/shared.module';
 
@@ -8,7 +8,15 @@ import { Login2Component } from 'app/main/pages/authentication/login-2/login-2.c
 
 const routes = [
     {
+        path     : 'auth/login-2/:token',
+        component: Login2Component
+    },
+    {
         path     : 'auth/login-2',
+        component: Login2Component
+    },
+    {
+        path     : '',
         component: Login2Component
     }
 ];
@@ -25,6 +33,7 @@ const routes = [
         MatFormFieldModule,
         MatIconModule,
         MatInputModule,
+        MatSnackBarModule,
 
         FuseSharedModule
     ]

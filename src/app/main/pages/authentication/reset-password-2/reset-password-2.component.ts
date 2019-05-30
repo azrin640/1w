@@ -5,6 +5,9 @@ import { takeUntil } from 'rxjs/internal/operators';
 
 import { FuseConfigService } from '@fuse/services/config.service';
 import { fuseAnimations } from '@fuse/animations';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ResetPassword2Service } from './reset-password-2.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
     selector     : 'reset-password-2',
@@ -16,13 +19,19 @@ import { fuseAnimations } from '@fuse/animations';
 export class ResetPassword2Component implements OnInit, OnDestroy
 {
     resetPasswordForm: FormGroup;
+    token: Params;
 
     // Private
     private _unsubscribeAll: Subject<any>;
 
     constructor(
         private _fuseConfigService: FuseConfigService,
-        private _formBuilder: FormBuilder
+        private _formBuilder: FormBuilder,
+
+        private route: ActivatedRoute,
+        private resetPasswordService: ResetPassword2Service,
+        public snackBar: MatSnackBar,
+        private router: Router
     )
     {
         // Configure the layout
@@ -57,7 +66,6 @@ export class ResetPassword2Component implements OnInit, OnDestroy
     ngOnInit(): void
     {
         this.resetPasswordForm = this._formBuilder.group({
-            name           : ['', Validators.required],
             email          : ['', [Validators.required, Validators.email]],
             password       : ['', Validators.required],
             passwordConfirm: ['', [Validators.required, confirmPasswordValidator]]
@@ -70,6 +78,37 @@ export class ResetPassword2Component implements OnInit, OnDestroy
             .subscribe(() => {
                 this.resetPasswordForm.get('passwordConfirm').updateValueAndValidity();
             });
+        
+        this.route.params.subscribe(auth => this.token = auth.token);
+        
+    }
+
+    resetPassword()
+    {
+        let user = this.resetPasswordForm.value;
+        user.token = this.token;
+
+        this.resetPasswordService.resetPassword(user)
+            .subscribe(
+                (response: any) => {
+                    
+                    console.log(response);
+                    if(response.status == 401) {
+                        this.snackBar.open(response.statusText, 'X', {duration: 10000, panelClass: 'pink'});
+                        this.router.navigate(['auth/forgot-password-2'])
+                    }
+                    else if(response.status == 400) {
+                        this.snackBar.open(response.statusText, 'X', {duration: 10000, panelClass: 'pink'});
+                        this.router.navigate(['auth/forgot-password-2'])
+                    }
+                    else if(response.status == 200) {
+                        this.snackBar.open(response.statusText, 'X', {duration: 10000, panelClass: 'light-green'});
+                        localStorage.setItem('token', response.jwtToken);
+                        this.router.navigate(['profile', response.id]);
+                    }
+                },
+                error => this.snackBar.open(error.statusText, 'X', {duration: 10000, panelClass: 'pink'})
+            )
     }
 
     /**

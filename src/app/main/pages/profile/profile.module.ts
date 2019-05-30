@@ -13,7 +13,7 @@ import { ProfilePhotosVideosComponent } from 'app/main/pages/profile/tabs/photos
 
 const routes = [
     {
-        path     : 'profile',
+        path     : 'profile/:id',
         component: ProfileComponent,
         resolve  : {
             profile: ProfileService

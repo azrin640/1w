@@ -4,7 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
-import { MatButtonModule, MatIconModule } from '@angular/material';
+import { MatButtonModule, MatIconModule, MatSnackBarModule } from '@angular/material';
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { TranslateModule } from '@ngx-translate/core';
 import 'hammerjs';
@@ -26,7 +26,7 @@ const appRoutes: Routes = [
         loadChildren: './main/apps/apps.module#AppsModule'
     },
     {
-        path        : 'pages',
+        path        : '', //'pages',
         loadChildren: './main/pages/pages.module#PagesModule'
     },
     {
@@ -43,7 +43,7 @@ const appRoutes: Routes = [
     },
     {
         path      : '**',
-        redirectTo: 'apps/dashboards/analytics'
+        redirectTo: 'auth/login-2'
     }
 ];
 
@@ -69,6 +69,7 @@ const appRoutes: Routes = [
         // Material
         MatButtonModule,
         MatIconModule,
+        MatSnackBarModule,
 
         // Fuse modules
         FuseModule.forRoot(fuseConfig),

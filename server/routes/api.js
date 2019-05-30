@@ -16,25 +16,42 @@ const multer = require('multer');
 var storage = multer.memoryStorage();
 var upload = multer({ storage: storage });
 
-router.get('/', (req, res) => {
-    res.render('index');
-});
-
-router.get('/user/pc', 
-    userController.getUserPcInfo
-);
-
 // ** USER **
 
-router.post('/user', 
-    catchErrors(userController.isLoggedIn),
-    userController.validateRegister,
-    catchErrors(userController.getUser)
+router.post('/user/registration',
+    userController.reqValidateRegister,
+    userController.errorsValidateRegister,
+    catchErrors(userController.userExist),
+    catchErrors(userController.register)    
 );
 
-router.post('/user/registration',
-    catchErrors(userController.registration)
+router.post('/user/authenticate', 
+    userController.reqValidateLogin,
+    userController.errorsValidateLogin,
+    catchErrors(userController.authenticate)
 );
+
+router.post('/user/login', 
+    userController.reqValidateLogin,
+    userController.errorsValidateLogin,
+    catchErrors(userController.login)
+);
+
+router.post('/user/forgot-password',
+    userController.reqValidateForgotPassword,
+    userController.errorsValidateForgotPassword,
+    catchErrors(userController.forgotPassword)
+);
+
+router.post('/user/reset-password',
+    userController.reqValidateResetPassword,
+    userController.errorsValidateResetPassword,
+    catchErrors(userController.resetPassword)
+);
+
+
+
+
 
 router.post('/user/new', 
     catchErrors(userController.isLoggedIn),
@@ -71,17 +88,13 @@ router.post('/user/username/autocomplete',
     catchErrors(userController.getUsernameAutocomplete)
 )
 
-router.post('/register', 
-    userController.validateRegister,
-    catchErrors(userController.register)
-);
+// router.post('/register', 
+//     userController.validateRegister,
+//     catchErrors(userController.register)
+// );
 
 router.post('/user/remove', catchErrors(userController.removeUser));
 
-router.post('/login', 
-    userController.validateLogin,
-    userController.login
-);
 
 // ** PRODUCT **
 

@@ -7,7 +7,7 @@
         </div>
 
         <div class="title" [@animate]="{value:'*',params:{delay:'50ms',y:'25px'}}">
-            Welcome to the FUSE!
+            Welcome to 1WORLD.IO!
         </div>
 
         <div class="description" [@animate]="{value:'*',params:{delay:'100ms',y:'25px'}}">
@@ -32,7 +32,7 @@
 
                 <mat-form-field appearance="outline">
                     <mat-label>Email</mat-label>
-                    <input matInput formControlName="email">
+                    <input matInput formControlName="email" autocomplete="email">
                     <mat-icon matSuffix class="secondary-text">mail</mat-icon>
                     <mat-error *ngIf="loginForm.get('email').hasError('required')">
                         Email is required
@@ -46,7 +46,7 @@
 
                 <mat-form-field appearance="outline">
                     <mat-label>Password</mat-label>
-                    <input matInput type="password" formControlName="password">
+                    <input matInput type="password" formControlName="password" autocomplete="password">
                     <mat-icon matSuffix class="secondary-text">vpn_key</mat-icon>
                     <mat-error>
                         Password is required
@@ -59,19 +59,19 @@
                         Remember Me
                     </mat-checkbox>
 
-                    <a class="forgot-password" [routerLink]="'/pages/auth/forgot-password-2'">
+                    <a class="forgot-password" [routerLink]="'/auth/forgot-password-2'">
                         Forgot Password?
                     </a>
                 </div>
 
                 <button mat-raised-button color="accent" class="submit-button" aria-label="LOGIN"
-                        [disabled]="loginForm.invalid">
+                        [disabled]="loginForm.invalid" (click)="login()">
                     LOGIN
                 </button>
 
             </form>
 
-            <div class="separator">
+            <!-- <div class="separator">
                 <span class="text">OR</span>
             </div>
 
@@ -85,11 +85,11 @@
                     Log in with Facebook
                 </button>
 
-            </div>
+            </div> -->
 
             <div class="register" fxLayout="column" fxLayoutAlign="center center">
                 <span class="text">Don't have an account?</span>
-                <a class="link" [routerLink]="'/pages/auth/register-2'">Create an account</a>
+                <a class="link" [routerLink]="'/auth/register-2'">Create an account</a>
             </div>
         </div>
     </div>

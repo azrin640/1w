@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, catchError } from 'rxjs/operators';
 
 import { FuseConfigService } from '@fuse/services/config.service';
 import { fuseAnimations } from '@fuse/animations';
+import { Register2Service } from './register-2.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
     selector     : 'register-2',
@@ -22,7 +24,10 @@ export class Register2Component implements OnInit, OnDestroy
 
     constructor(
         private _fuseConfigService: FuseConfigService,
-        private _formBuilder: FormBuilder
+        private _formBuilder: FormBuilder,
+
+        private registerService: Register2Service,
+        private snackBar: MatSnackBar
     )
     {
         // Configure the layout
@@ -57,10 +62,11 @@ export class Register2Component implements OnInit, OnDestroy
     ngOnInit(): void
     {
         this.registerForm = this._formBuilder.group({
-            name           : ['', Validators.required],
+            username           : ['', Validators.required],
             email          : ['', [Validators.required, Validators.email]],
             password       : ['', Validators.required],
-            passwordConfirm: ['', [Validators.required, confirmPasswordValidator]]
+            passwordConfirm: ['', [Validators.required, confirmPasswordValidator]],
+            terms          : ['', [Validators.required]]
         });
 
         // Update the validity of the 'passwordConfirm' field
@@ -70,6 +76,28 @@ export class Register2Component implements OnInit, OnDestroy
             .subscribe(() => {
                 this.registerForm.get('passwordConfirm').updateValueAndValidity();
             });
+    }
+
+    createAccount()
+    {
+        this.registerService.register(this.registerForm.value)
+            .subscribe(
+                
+                (response: any) => {
+
+                    if(response && response.status == 400){
+                        this.snackBar.open( response.statusText, 'X', { duration: 10000, panelClass: 'yellow' });
+                    }
+                    else if(response && response._id){
+                        this.snackBar.open('Registration successful, please check your email', 'X', { duration: 10000, panelClass: 'light-green' });
+                    }
+                    else{
+                        this.snackBar.open('Registration error, please try again', 'X', { duration: 10000, panelClass: 'pink' });
+                    }
+                },
+                error => this.snackBar.open('Registration error, please try again. Error: ' + error.statusText , 'X', { duration: 10000, panelClass: 'pink' })
+                
+            );
     }
 
     /**

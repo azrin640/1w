@@ -13,23 +13,25 @@ const userSchema = new mongoose.Schema({
     },
     username: {
         type: String,
-        required: 'Please supply a username',
-        unique: true
-    },
-    name: {
-        type: String,
-        required: 'Please supply a name',
-        trim: true
+        required: 'Please supply a username'        
     },
     email: {
         type: String,
         required: 'Please supply an email address',
         lowercase: true,
-        trim: true     
+        trim: true,
+        unique: true   
+    },
+    name: {
+        type: String,
+        trim: true
+    },
+    terms: {
+        type: Boolean,
+        required: 'You need to accept terms and condition to register'
     },
     phone: {
         type: Number,
-        required: 'Please supply a phone number',
         trim: true
     },
     birthDate: Date,
@@ -42,16 +44,13 @@ const userSchema = new mongoose.Schema({
         ref: 'User'
     },
     address1: {
-        type: String,
-        required: true
+        type: String
     },
     address2: {
-        type: String,
-        required: true
+        type: String
     },
     tcCheckBox: {
-        type: Boolean,
-        required: 'Please agree to the terms and conditions'
+        type: Boolean
     },
     admin: {
         type: Boolean,
@@ -76,6 +75,7 @@ const userSchema = new mongoose.Schema({
   toObject: {virtuals: true}
 });
 
+// Make sure the email is unique
 userSchema.plugin(passportLocalMongoose, {usernameField: 'email'});
 userSchema.plugin(mongodbErrorHandler);
 
@@ -88,16 +88,15 @@ userSchema.methods.generateJwt = function() {
       _id: this._id,
       username: this.username,
       email: this.email,
-      name: this.name,
       admin: this.admin,
       exp: parseInt(expiry.getTime() / 1000),
     }, process.env.MY_SECRET); // DO NOT KEEP YOUR SECRET IN THE CODE!
 };
 
-userSchema.virtual('introducerInfo', {
-    ref: 'User',
-    localField: 'introducer', 
-    foreignField: '_id'
-});
+// userSchema.virtual('introducerInfo', {
+//     ref: 'User',
+//     localField: 'introducer', 
+//     foreignField: '_id'
+// });
 
 module.exports = mongoose.model('User', userSchema);

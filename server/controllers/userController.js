@@ -2,100 +2,74 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const passport = require('passport');
 const User = mongoose.model('User');
-const { promisify } = require('es6-promisify');
-require('express-validator');
+const { body, validationResult  } = require('express-validator/check');
+const { sanitizeBody } = require('express-validator/filter');
 const jwt = require('jsonwebtoken');
-const passportJWT = require('passport-jwt');
-const JwtStrategy = require('passport-jwt').Strategy,
-    ExtractJwt = require('passport-jwt').ExtractJwt;
+// const passportJWT = require('passport-jwt');
+// const JwtStrategy = require('passport-jwt').Strategy,
+//     ExtractJwt = require('passport-jwt').ExtractJwt;
 const crypto = require('crypto');
 const mail = require('../handlers/mail');
 const axios = require('axios');
 const dns = require('dns');
 const os = require('os');
 
-exports.getUserPcInfo = (req, res) => {
-    const userInfo = os.userInfo();
-    if(userInfo) res.json(userInfo);
+
+// ** Registration **
+exports.reqValidateRegister = [
+
+    body('username').not().isEmpty().trim().escape(),
+    body('email').isEmail().normalizeEmail(),
+    body('password').not().isEmpty().trim().escape(),
+    body('passwordConfirm').not().isEmpty().trim().escape(),
+    sanitizeBody('terms').toBoolean()
+                            
+];
+
+exports.errorsValidateRegister = (req, res, next) => {
+    
+    const errors = validationResult(req);    
+
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });    
+    }
+    else return next();
+
 };
 
-exports.validateRegister = (req, res, next) => {
+exports.userExist = async (req, res, next) => {
 
-    req.sanitizeBody('username');
-    req.check('username').not().isEmpty();
+    const user = await User.findOne({ email: req.body.email });
 
-    req.sanitizeBody('name');
-    req.check('name').not().isEmpty();
-    
-    req.sanitizeBody('email').normalizeEmail({
-        remove_dots: false,
-        remove_extensions: false,
-        gmail_remove_subaddress: false 
-    });
-    req.check('email').not().isEmpty();
+    if(!user){
+       return next();               
+    }
 
-    req.sanitizeBody('phone');
-    req.check('phone').not().isEmpty();
-    
-    req.sanitizeBody('introducer');
+    res.json({ status: 400, statusText: 'Email already exist. Please login with your email'});       
 
-    req.sanitizeBody('password');
-    req.check('password').not().isEmpty();
-
-    req.sanitizeBody('cpassword');
-    req.check('cpassword').not().isEmpty();
-    
-    req.sanitizeBody('address1');
-    req.check('address1').not().isEmpty();
-
-    req.sanitizeBody('address2');
-    req.check('address2').not().isEmpty();
-
-    req.sanitizeBody('postcode');
-    req.check('postcode').not().isEmpty();
-
-    req.sanitizeBody('city');
-    req.check('city').not().isEmpty();
-
-    req.sanitizeBody('state');
-    req.check('state').not().isEmpty();
-
-    const errors = req.validationErrors();  
-    if(errors) res.json(errors);
-    return next();
 };
 
 exports.register = async (req, res) => {
+
     const authToken = crypto.randomBytes(20).toString('hex');
     const authTokenExpire = Date.now() + 3600000; 
     
     const user = new User({
-        introducer: req.body.introducer,
         username: req.body.username,
-        name: req.body.name,
         email: req.body.email,
-        phone: req.body.phone,
-        birthdate: req.body.birthdate,
-        address1: req.body.address1,
-        address2: req.body.address2,    
-        postcode: req.body.postcode,
-        city: req.body.city,
-        state: req.body.state,    
-        tcCheckBox : req.body.tcCheckBox,
         authToken,
-        authTokenExpire
+        authTokenExpire,
+        terms: req.body.terms
     });
 
     await user.setPassword(req.body.password);
 
-    const response = await user.save().catch(error => {
-        res.json(error);
-    });
+    const response = await user.save();
 
     if(response && response._id){
 
         // Send email for authentication                           
-        const authURL = `http://${req.headers.host}/register/auth/${response.authToken}`;
+        const authURL = `http://${req.headers.host}/auth/login-2/${response.authToken}`;
         var options = {
             user: {
                 email: response.email
@@ -105,66 +79,173 @@ exports.register = async (req, res) => {
                 or this link ${authURL}`
         };
         var sendMail = mail.send(options); 
-
         res.json(response);
     }
+
+};
+
+// ** Login **
+exports.reqValidateLogin = [
+
+    body('email').isEmail().normalizeEmail(),
+    body('password').not().isEmpty().trim().escape()
+                            
+];
+
+exports.errorsValidateLogin = (req, res, next) => {
+    
+    const errors = validationResult(req);    
+
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });    
+    }
+    else return next();
+
 };
 
 exports.authenticate = async (req, res, next) => {
-    const authToken = req.body.authToken;
-    const user = await User.findOne({authToken});
-    if(user){
-        const token = user.generateJwt();
-        const authenticate = await User.findOneAndUpdate({_id: user._id}, {authenticated: true});
-        res.json({token: token});
-    }else{
-        res.json({
-            status: 400,
-            message: 'No user found'
-        })
+
+    const authToken = req.body.authToken; 
+
+    const authenticate = User.authenticate();
+    authenticate(req.body.email, req.body.password, async(err, user) => {
+
+        if(err) res.json(err);
+        else if(!user) res.json({ status: 400, statusText: 'Email or password error.'});
+        else if(user){
+
+            const tokenExpiry = user.authTokenExpire.getTime();
+            const now = Date.now();
+
+            if(tokenExpiry < now){
+                res.json({ status: 401, statusText: 'Your authentication link has already expired. Please register again.' });
+            }
+            else if(tokenExpiry > now){
+                const authenticated = await User.findOneAndUpdate({_id: user._id}, {authenticated: true});
+                if(!authenticated) res.json({ status: 400, statusText: 'Authentication error. Please login again.' });
+                const token = user.generateJwt();
+                const id = user._id;
+                res.json({id, token});
+            }
+            else {
+                res.json({ status: 400, statusText: 'Authentication link error. Please register again.' });
+            }
+            
+        } 
+    });
+};
+
+exports.login = (req, res) => {
+    const authenticate = User.authenticate();
+    authenticate(req.body.email, req.body.password, (err, user) => {
+        if(err) res.json(err);
+        else if(!user) res.json({ status: 400, statusText: 'Email or password error.'});
+        else if(user){
+            const token = user.generateJwt();
+            const id = user._id;
+            res.json({id, token});
+        } 
+    });
+}
+
+// ** Forgot Password **
+exports.reqValidateForgotPassword = [
+
+    body('email').isEmail().normalizeEmail()
+                            
+];
+
+exports.errorsValidateForgotPassword = (req, res, next) => {
+    
+    const errors = validationResult(req);    
+
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });    
+    }
+    else return next();
+
+};
+
+exports.forgotPassword = async(req, res) => {
+
+    const user = await User.findOne({ email: req.body.email });
+
+    if(!user) res.json({ status: 400, statusText: 'Email does not exist, please register to login.'});  
+    else if(user) {
+
+        const authToken = crypto.randomBytes(20).toString('hex');
+        const authTokenExpire = Date.now() + 3600000; 
+
+        const updatedAuthTokenUser = await User.findOneAndUpdate({_id: user._id}, {authToken, authTokenExpire}, {new: true});
+
+        if(!updatedAuthTokenUser) res.json({ status: 400, statusText: 'Fail to generate token, please try again'});
+
+        // Send email for password change                           
+        const authURL = `http://${req.headers.host}/auth/reset-password-2/${updatedAuthTokenUser.authToken}`;
+        var options = {
+            user: {
+                email: updatedAuthTokenUser.email
+            },
+            subject: 'Forgot password authentication',
+            html: `
+                <p>IMPORTANT: We have received a request from you to change your password. Please change your password in one hour after receiving this email. If it is not you, please ignore this email.</p>
+                <p>Change your password <a href="${authURL}"> this link</a></br>
+                or this link ${authURL}.</p>`
+        };
+        var sendMail = mail.send(options); 
+        res.json({ status: 200, statusText: 'Success. Please check your email to change your password in one hour before link expired.'});
+    }       
+
+};
+
+// ** Reset Password
+exports.reqValidateResetPassword = [
+
+    body('email').isEmail().normalizeEmail(),
+    body('password').not().isEmpty().trim().escape(),
+    body('passwordConfirm').not().isEmpty().trim().escape()
+                            
+];
+
+exports.errorsValidateResetPassword = (req, res, next) => {
+    
+    const errors = validationResult(req);    
+
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });    
+    }
+    else return next();
+
+};
+
+exports.resetPassword = async(req, res, next) => {
+
+    const user = await User.findOne({authToken: req.body.token});
+    if(!user) res.json({status: 400, statusText: 'Email or password or link error, please apply to reset your password again.'});
+
+    const tokenExpiry = user.authTokenExpire.getTime();
+    const now = Date.now();
+
+    if(tokenExpiry < now){
+        res.json({ status: 401, statusText: 'Your authentication link has already expired. Please apply forgot password again.' });
+    }
+    else if(tokenExpiry > now){
+        const editedUser = await user.setPassword(req.body.password);
+        if(!editedUser) res.json({status: 400, statusText: 'Email or password error, please use the same email to reset your password.'});
+        else if(editedUser) {
+            const jwtToken = user.generateJwt();
+            const id = editedUser._id;
+            res.json({status: 200, statusText: 'Password reset successful.', id, jwtToken});
+        }            
     }
 };
 
-exports.validateLogin = (req, res, next) => {
 
-    req.sanitizeBody('email').normalizeEmail({
-        remove_dots: false,
-        remove_extensions: false,
-        gmail_remove_subaddress: false 
-    });
-    req.checkBody('email', 'That email is not valid').isEmail();
 
-    req.sanitizeBody('password');
-    req.checkBody('password', 'Password can not be blank').notEmpty();
 
-    const errors = req.validationErrors();  
-    if(errors) res.json(errors);
-    return next();
 
-} 
 
-exports.login = (req, res, next) => {
 
-    passport.authenticate('local', function(err, user, info){
-        if(err) res.json(error);
-        if(!user) {
-            res.json({
-                status: 404,
-                message: 'User not found'
-            })
-        }
-        if(user){
-            var token = user.generateJwt();
-            res.json({
-                status: 202,
-                message: 'User login accepted',
-                token: token,
-                id: user._id
-            });
-        }
-
-    })(req, res, next);
-};
 
 exports.isLoggedIn = async (req, res, next) => {
     var auth = req.headers.authorization;

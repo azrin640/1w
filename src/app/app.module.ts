@@ -19,6 +19,8 @@ import { FakeDbService } from 'app/fake-db/fake-db.service';
 import { AppComponent } from 'app/app.component';
 import { AppStoreModule } from 'app/store/store.module';
 import { LayoutModule } from 'app/layout/layout.module';
+import { AuthService } from './services/auth-service/auth-service.service';
+import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
 
 const appRoutes: Routes = [
     {
@@ -80,7 +82,20 @@ const appRoutes: Routes = [
 
         // App modules
         LayoutModule,
-        AppStoreModule
+        AppStoreModule,
+
+        // JWT 
+        HttpClientModule,
+        JwtModule.forRoot({
+            config: {
+                tokenGetter: () => {
+                    return localStorage.getItem('token');
+                }
+            }
+        })
+    ],
+    providers   : [
+        AuthService
     ],
     bootstrap   : [
         AppComponent

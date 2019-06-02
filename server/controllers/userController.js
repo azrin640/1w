@@ -11,8 +11,25 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const mail = require('../handlers/mail');
 const axios = require('axios');
-const dns = require('dns');
-const os = require('os');
+
+
+// ** Reusable **
+exports.validateUserId = [
+
+    body('_id').not().isEmpty().trim().escape()
+
+];
+
+exports.validationErrors = (req, res, next) => {
+    
+    const errors = validationResult(req);    
+
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });    
+    }
+    else return next();
+
+};
 
 
 // ** Registration **
@@ -25,17 +42,6 @@ exports.reqValidateRegister = [
     sanitizeBody('terms').toBoolean()
                             
 ];
-
-exports.errorsValidateRegister = (req, res, next) => {
-    
-    const errors = validationResult(req);    
-
-    if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.array() });    
-    }
-    else return next();
-
-};
 
 exports.userExist = async (req, res, next) => {
 
@@ -92,17 +98,6 @@ exports.reqValidateLogin = [
                             
 ];
 
-exports.errorsValidateLogin = (req, res, next) => {
-    
-    const errors = validationResult(req);    
-
-    if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.array() });    
-    }
-    else return next();
-
-};
-
 exports.authenticate = async (req, res, next) => {
 
     const authToken = req.body.authToken; 
@@ -155,17 +150,6 @@ exports.reqValidateForgotPassword = [
                             
 ];
 
-exports.errorsValidateForgotPassword = (req, res, next) => {
-    
-    const errors = validationResult(req);    
-
-    if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.array() });    
-    }
-    else return next();
-
-};
-
 exports.forgotPassword = async(req, res) => {
 
     const user = await User.findOne({ email: req.body.email })
@@ -212,17 +196,6 @@ exports.reqValidateResetPassword = [
                             
 ];
 
-exports.errorsValidateResetPassword = (req, res, next) => {
-    
-    const errors = validationResult(req);    
-
-    if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.array() });    
-    }
-    else return next();
-
-};
-
 exports.resetPassword = async(req, res) => {
 
     const user = await User.findOne({authToken: req.body.token})
@@ -253,6 +226,47 @@ exports.resetPassword = async(req, res) => {
 
 };
 
+exports.profileUser = async(req, res) => {
+    
+    const user = await User.findOne({_id: req.body._id})
+        .catch(error => res.json(error));
+
+    if(user) res.json(user);
+    else res.json({ status: 400, statusText: 'User does not exist, please register to login.'});  
+
+}
+
+// ** Edit Profile
+exports.reqValidateProfile = [
+
+    body('_id').not().isEmpty().trim().escape(),
+    body('username').not().isEmpty().trim().escape(),
+    body('birthday').not().isEmpty().trim().escape(),
+    body('handphone').not().isEmpty().trim().escape(),   
+    body('address').not().isEmpty().trim(),
+    body('address2').not().isEmpty().trim(),
+    body('address2').not().isEmpty().trim().escape(),
+    body('city').not().isEmpty().trim().escape(),
+    body('state').not().isEmpty().trim().escape(),
+    body('postcode').not().isEmpty().trim().escape(),
+    body('country').not().isEmpty().trim().escape()
+
+];
+
+exports.editProfile = async (req, res) => {
+
+    const profile = req.body;
+    console.log(profile);
+    const user = await User.findOneAndUpdate({_id: req.body._id}, profile, {new: true, useFindAndModify: false})
+        .catch(error => res.json(error));
+    
+    if(user) {
+        res.json(user);
+        console.log(user);
+    }
+    else res.json({ status: 400, statusText: 'Fail to update profile, please try again'});
+
+}
 
 
 

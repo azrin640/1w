@@ -10,7 +10,6 @@ import { ProfileTimelineComponent } from 'app/main/pages/profile/tabs/timeline/t
 import { ProfileAboutComponent } from 'app/main/pages/profile/tabs/about/about.component';
 import { ProfilePhotosVideosComponent } from 'app/main/pages/profile/tabs/photos-videos/photos-videos.component';
 
-
 const routes = [
     {
         path     : 'profile/:id',

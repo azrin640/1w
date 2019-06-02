@@ -22,36 +22,22 @@ const userSchema = new mongoose.Schema({
         trim: true,
         unique: true   
     },
-    name: {
-        type: String,
-        trim: true
-    },
     terms: {
         type: Boolean,
         required: 'You need to accept terms and condition to register'
     },
-    phone: {
+    company: String,
+    handphone: {
         type: Number,
         trim: true
     },
-    birthDate: Date,
-    level: {
-        type: String,
-        default: 'customer'
-    },
-    introducer: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User'
-    },
-    address1: {
-        type: String
-    },
-    address2: {
-        type: String
-    },
-    tcCheckBox: {
-        type: Boolean
-    },
+    birthday: Date,
+    address: String,
+    address2: String,
+    city: String,
+    state: String,
+    postcode: Number,
+    country: String,
     admin: {
         type: Boolean,
         default: false

@@ -7,6 +7,9 @@ import { FuseConfigService } from '@fuse/services/config.service';
 import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
 import { FusePerfectScrollbarDirective } from '@fuse/directives/fuse-perfect-scrollbar/fuse-perfect-scrollbar.directive';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
+import { AuthService } from 'app/services/auth-service/auth-service.service';
+import { User } from 'app/interface/user';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
     selector     : 'navbar-vertical-style-1',
@@ -18,6 +21,8 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy
 {
     fuseConfig: any;
     navigation: any;
+
+    user: User;
 
     // Private
     private _fusePerfectScrollbar: FusePerfectScrollbarDirective;
@@ -35,7 +40,10 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy
         private _fuseConfigService: FuseConfigService,
         private _fuseNavigationService: FuseNavigationService,
         private _fuseSidebarService: FuseSidebarService,
-        private _router: Router
+        private _router: Router,
+
+        private authService: AuthService,
+        private snackBar: MatSnackBar
     )
     {
         // Set the private defaults
@@ -128,6 +136,19 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy
             .subscribe(() => {
                 this.navigation = this._fuseNavigationService.getCurrentNavigation();
             });
+
+
+        this.authService.getUserProfile()
+            .subscribe(
+                (response) => {
+
+                    if(response && response._id){
+                        this.user = response;
+                    }
+                    else this.snackBar.open('Error getting your profile from database, please reload current page.', 'X', {duration: 10000, panelClass: 'pink'});
+                    
+                }
+            )
     }
 
     /**

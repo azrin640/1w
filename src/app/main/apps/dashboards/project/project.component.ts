@@ -7,6 +7,7 @@ import { fuseAnimations } from '@fuse/animations';
 
 import { ProjectDashboardService } from 'app/main/apps/dashboards/project/project.service';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
+import { AuthService } from 'app/services/auth-service/auth-service.service';
 
 @Component({
     selector     : 'project-dashboard',
@@ -38,7 +39,9 @@ export class ProjectDashboardComponent implements OnInit
      */
     constructor(
         private _fuseSidebarService: FuseSidebarService,
-        private _projectDashboardService: ProjectDashboardService
+        private _projectDashboardService: ProjectDashboardService,
+
+        private authService: AuthService
     )
     {
         /**
@@ -163,6 +166,7 @@ export class ProjectDashboardComponent implements OnInit
         this.widget11.onContactsChanged = new BehaviorSubject({});
         this.widget11.onContactsChanged.next(this.widgets.widget11.table.rows);
         this.widget11.dataSource = new FilesDataSource(this.widget11);
+
     }
 
     // -----------------------------------------------------------------------------------------------------

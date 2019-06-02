@@ -20,34 +20,54 @@ var upload = multer({ storage: storage });
 
 router.post('/user/registration',
     userController.reqValidateRegister,
-    userController.errorsValidateRegister,
+    userController.validationErrors,
     catchErrors(userController.userExist),
     catchErrors(userController.register)    
 );
 
 router.post('/user/authenticate', 
     userController.reqValidateLogin,
-    userController.errorsValidateLogin,
+    userController.validationErrors,
     catchErrors(userController.authenticate)
 );
 
 router.post('/user/login', 
     userController.reqValidateLogin,
-    userController.errorsValidateLogin,
+    userController.validationErrors,
     catchErrors(userController.login)
 );
 
 router.post('/user/forgot-password',
     userController.reqValidateForgotPassword,
-    userController.errorsValidateForgotPassword,
+    userController.validationErrors,
     catchErrors(userController.forgotPassword)
 );
 
 router.post('/user/reset-password',
     userController.reqValidateResetPassword,
-    userController.errorsValidateResetPassword,
+    userController.validationErrors,
     catchErrors(userController.resetPassword)
 );
+
+router.post('/user/profile', 
+    userController.validateUserId,
+    userController.validationErrors,
+    catchErrors(userController.profileUser)
+);
+
+router.post('/user/profile/edit',
+    userController.reqValidateProfile,
+    userController.validationErrors,
+    catchErrors(userController.editProfile)
+);
+
+
+
+
+
+
+
+
 
 
 

@@ -41,6 +41,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _fuse_animations__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @fuse/animations */ "./src/@fuse/animations/index.ts");
 /* harmony import */ var app_main_apps_dashboards_project_project_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! app/main/apps/dashboards/project/project.service */ "./src/app/main/apps/dashboards/project/project.service.ts");
 /* harmony import */ var _fuse_components_sidebar_sidebar_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @fuse/components/sidebar/sidebar.service */ "./src/@fuse/components/sidebar/sidebar.service.ts");
+/* harmony import */ var app_services_auth_service_auth_service_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! app/services/auth-service/auth-service.service */ "./src/app/services/auth-service/auth-service.service.ts");
+
 
 
 
@@ -56,10 +58,11 @@ var ProjectDashboardComponent = /** @class */ (function () {
      * @param {FuseSidebarService} _fuseSidebarService
      * @param {ProjectDashboardService} _projectDashboardService
      */
-    function ProjectDashboardComponent(_fuseSidebarService, _projectDashboardService) {
+    function ProjectDashboardComponent(_fuseSidebarService, _projectDashboardService, authService) {
         var _this = this;
         this._fuseSidebarService = _fuseSidebarService;
         this._projectDashboardService = _projectDashboardService;
+        this.authService = authService;
         this.widget5 = {};
         this.widget6 = {};
         this.widget7 = {};
@@ -200,7 +203,8 @@ var ProjectDashboardComponent = /** @class */ (function () {
             styles: [__webpack_require__(/*! ./project.component.scss */ "./src/app/main/apps/dashboards/project/project.component.scss")]
         }),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_fuse_components_sidebar_sidebar_service__WEBPACK_IMPORTED_MODULE_7__["FuseSidebarService"],
-            app_main_apps_dashboards_project_project_service__WEBPACK_IMPORTED_MODULE_6__["ProjectDashboardService"]])
+            app_main_apps_dashboards_project_project_service__WEBPACK_IMPORTED_MODULE_6__["ProjectDashboardService"],
+            app_services_auth_service_auth_service_service__WEBPACK_IMPORTED_MODULE_8__["AuthService"]])
     ], ProjectDashboardComponent);
     return ProjectDashboardComponent;
 }());

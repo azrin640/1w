@@ -68,7 +68,7 @@
     "hammerjs": "2.0.8",
     "jimp": "0.6.4",
     "jsonwebtoken": "8.5.1",
-    "lodash": "4.17.11",
+    "lodash": "4.17.21",
     "moment": "2.23.0",
     "mongoose": "5.5.11",
     "mongoose-autopopulate": "0.9.1",
